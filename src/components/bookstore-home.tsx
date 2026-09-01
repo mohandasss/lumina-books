@@ -17,7 +17,7 @@ import author2 from "@/assets/author-2.jpg";
 import author3 from "@/assets/author-3.jpg";
 
 type Book = { title: string; author: string; cover: string; price: string; rating: string; category: string; detail?: string };
-const books: Book[] = [
+const books = [
   { title: "The Midnight Library", author: "Matt Haig", cover: midnight, price: "$18.00", rating: "4.9", category: "Fiction", detail: "Mar 2026" },
   { title: "The Far Shore", author: "Lena Mori", cover: ocean, price: "$21.00", rating: "4.8", category: "Literary", detail: "Feb 2026" },
   { title: "A Map of Silence", author: "Yuki Tanaka", cover: silence, price: "$16.50", rating: "4.9", category: "Translated", detail: "Jan 2026" },
@@ -26,7 +26,7 @@ const books: Book[] = [
   { title: "What the Light Kept", author: "Noor Ahmed", cover: light, price: "$19.50", rating: "4.6", category: "Contemporary", detail: "May 2026" },
   { title: "The River Remembers", author: "Sofia Ibarra", cover: river, price: "$22.00", rating: "4.8", category: "World Fiction", detail: "Jun 2026" },
   { title: "Systems of Thought", author: "Dr. Ada Reyes", cover: code, price: "$38.00", rating: "4.9", category: "Computer Science", detail: "2026 Edition" },
-];
+] satisfies [Book, Book, Book, Book, Book, Book, Book, Book];
 
 function Button({ children, secondary = false, onClick, type = "button" }: { children: ReactNode; secondary?: boolean; onClick?: () => void; type?: "button" | "submit" }) {
   return <button type={type} onClick={onClick} className={secondary ? "btn btn-secondary" : "btn btn-primary"}>{children}</button>;
@@ -50,7 +50,7 @@ function BookCard({ book, compact = false, onWish, onCart }: { book: Book; compa
 function BookCarousel({ title, eyebrow, items, onWish, onCart }: { title: string; eyebrow?: string; items: Book[]; onWish: () => void; onCart: () => void }) {
   const rail = useRef<HTMLDivElement>(null);
   const move = (dir: number) => rail.current?.scrollBy({ left: dir * 520, behavior: "smooth" });
-  return <section className="section" id="books"><div className="container"><div className="carousel-head"><SectionHeading eyebrow={eyebrow} title={title} action="View all"/><div className="arrow-set"><IconButton label="Previous" onClick={() => move(-1)}><ArrowLeft size={19}/></IconButton><IconButton label="Next" onClick={() => move(1)}><ArrowRight size={19}/></IconButton></div></div><div className="book-rail" ref={rail}>{items.map((book, i) => <BookCard key={`${title}-${i}`} book={book} onWish={onWish} onCart={onCart}/>)}</div></div></section>;
+  return <section className="section" id="books"><div className="container"><div className="carousel-head"><SectionHeading {...(eyebrow ? { eyebrow } : {})} title={title} action="View all"/><div className="arrow-set"><IconButton label="Previous" onClick={() => move(-1)}><ArrowLeft size={19}/></IconButton><IconButton label="Next" onClick={() => move(1)}><ArrowRight size={19}/></IconButton></div></div><div className="book-rail" ref={rail}>{items.map((book, i) => <BookCard key={`${title}-${i}`} book={book} onWish={onWish} onCart={onCart}/>)}</div></div></section>;
 }
 function Navbar({ wish, cart }: { wish: number; cart: number }) {
   const [searchOpen, setSearchOpen] = useState(false); const [menu, setMenu] = useState(false); const [scrolled, setScrolled] = useState(false);
