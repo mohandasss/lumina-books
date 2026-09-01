@@ -17,7 +17,7 @@ import author2 from "@/assets/author-2.jpg";
 import author3 from "@/assets/author-3.jpg";
 
 type Book = { title: string; author: string; cover: string; price: string; rating: string; category: string; detail?: string };
-const books: Book[] = [
+const books = [
   { title: "The Midnight Library", author: "Matt Haig", cover: midnight, price: "$18.00", rating: "4.9", category: "Fiction", detail: "Mar 2026" },
   { title: "The Far Shore", author: "Lena Mori", cover: ocean, price: "$21.00", rating: "4.8", category: "Literary", detail: "Feb 2026" },
   { title: "A Map of Silence", author: "Yuki Tanaka", cover: silence, price: "$16.50", rating: "4.9", category: "Translated", detail: "Jan 2026" },
@@ -26,7 +26,7 @@ const books: Book[] = [
   { title: "What the Light Kept", author: "Noor Ahmed", cover: light, price: "$19.50", rating: "4.6", category: "Contemporary", detail: "May 2026" },
   { title: "The River Remembers", author: "Sofia Ibarra", cover: river, price: "$22.00", rating: "4.8", category: "World Fiction", detail: "Jun 2026" },
   { title: "Systems of Thought", author: "Dr. Ada Reyes", cover: code, price: "$38.00", rating: "4.9", category: "Computer Science", detail: "2026 Edition" },
-];
+] satisfies [Book, Book, Book, Book, Book, Book, Book, Book];
 
 function Button({ children, secondary = false, onClick, type = "button" }: { children: ReactNode; secondary?: boolean; onClick?: () => void; type?: "button" | "submit" }) {
   return <button type={type} onClick={onClick} className={secondary ? "btn btn-secondary" : "btn btn-primary"}>{children}</button>;
@@ -50,7 +50,7 @@ function BookCard({ book, compact = false, onWish, onCart }: { book: Book; compa
 function BookCarousel({ title, eyebrow, items, onWish, onCart }: { title: string; eyebrow?: string; items: Book[]; onWish: () => void; onCart: () => void }) {
   const rail = useRef<HTMLDivElement>(null);
   const move = (dir: number) => rail.current?.scrollBy({ left: dir * 520, behavior: "smooth" });
-  return <section className="section" id="books"><div className="container"><div className="carousel-head"><SectionHeading eyebrow={eyebrow} title={title} action="View all"/><div className="arrow-set"><IconButton label="Previous" onClick={() => move(-1)}><ArrowLeft size={19}/></IconButton><IconButton label="Next" onClick={() => move(1)}><ArrowRight size={19}/></IconButton></div></div><div className="book-rail" ref={rail}>{items.map((book, i) => <BookCard key={`${title}-${i}`} book={book} onWish={onWish} onCart={onCart}/>)}</div></div></section>;
+  return <section className="section" id="books"><div className="container"><div className="carousel-head"><SectionHeading {...(eyebrow ? { eyebrow } : {})} title={title} action="View all"/><div className="arrow-set"><IconButton label="Previous" onClick={() => move(-1)}><ArrowLeft size={19}/></IconButton><IconButton label="Next" onClick={() => move(1)}><ArrowRight size={19}/></IconButton></div></div><div className="book-rail" ref={rail}>{items.map((book, i) => <BookCard key={`${title}-${i}`} book={book} onWish={onWish} onCart={onCart}/>)}</div></div></section>;
 }
 function Navbar({ wish, cart }: { wish: number; cart: number }) {
   const [searchOpen, setSearchOpen] = useState(false); const [menu, setMenu] = useState(false); const [scrolled, setScrolled] = useState(false);
@@ -66,11 +66,25 @@ function Hero() { return <section className="hero" id="top"><div className="hero
   <div className="hero-books" aria-label="Curated book selection"><img className="hero-cover hero-cover-a" src={ocean} alt="The Far Shore cover" width={768} height={1152}/><img className="hero-cover hero-cover-b" src={silence} alt="A Map of Silence cover" width={768} height={1152}/><img className="hero-cover hero-cover-main" src={midnight} alt="The Midnight Library cover" width={768} height={1152}/><img className="hero-cover hero-cover-c" src={garden} alt="The Garden at Night cover" width={768} height={1152}/><div className="editors-pick"><span>EDITOR'S PICK</span><strong>The Midnight Library</strong><p>Matt Haig</p><div>★★★★★</div></div></div></div><div className="scroll-cue">SCROLL TO DISCOVER <span/></div></section>; }
 
 const authors = [
-  { name: "Haruki Murakami", genre: "Fiction · Magical Realism", works: "18 Works", image: author1 },
-  { name: "Anika Rao", genre: "Poetry · Essays", works: "7 Works", image: author2 },
-  { name: "Elias Brooks", genre: "Culture · Current Affairs", works: "11 Works", image: author3 },
+  { name: "Haruki Murakami", genre: "Fiction · Magical Realism", works: "18 Works", image: author1, note: "Dreamlike stories where memory, solitude and everyday life quietly overlap." },
+  { name: "Anika Rao", genre: "Poetry · Essays", works: "7 Works", image: author2, note: "Lyrical meditations on belonging, language and the landscapes we carry." },
+  { name: "Elias Brooks", genre: "Culture · Current Affairs", works: "11 Works", image: author3, note: "Incisive writing on culture, civic life and the ideas shaping our moment." },
 ];
-function Authors() { return <section className="section author-section" id="authors"><div className="container"><SectionHeading eyebrow="VOICES TO KNOW" title="Authors shaping today's stories" action="Meet all authors"/><div className="author-grid">{authors.map((a,i)=><article className={`author-card author-${i+1}`} key={a.name}><div className="portrait"><img src={a.image} alt={`Portrait of ${a.name}`} width={1024} height={1280} loading="lazy"/></div><span>0{i+1}</span><h3>{a.name}</h3><p>{a.genre}<br/>{a.works}</p><a href="#books">Explore Author <ArrowUpRight size={16}/></a></article>)}</div></div></section>; }
+function Authors() {
+  const [query, setQuery] = useState("");
+  const visibleAuthors = authors.filter((author) => `${author.name} ${author.genre}`.toLowerCase().includes(query.toLowerCase()));
+
+  return <section className="section author-section" id="authors"><div className="container author-shell">
+    <header className="author-heading"><div><p className="eyebrow">VOICES TO KNOW</p><h2>Meet the minds<br/>behind the stories.</h2><p>Discover singular voices from our most celebrated collection of literature.</p></div><label className="author-search"><Search size={18}/><span className="sr-only">Search authors or genres</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search authors or genres…"/></label></header>
+    <div className="author-grid">{visibleAuthors.map((author, index) => <article className="author-card" key={author.name}>
+      <div className="portrait"><img src={author.image} alt={`Portrait of ${author.name}`} width={1024} height={1280} loading="lazy"/><span>0{index + 1}</span></div>
+      <h3>{author.name}</h3><p className="author-specialty">{author.genre} · {author.works}</p><p className="author-note">{author.note}</p>
+      <div className="author-actions"><a href="#books">Explore Author <ArrowUpRight size={15}/></a><a href="#books"><BookOpen size={15}/> View Books</a></div>
+    </article>)}</div>
+    {visibleAuthors.length === 0 && <p className="author-empty">No authors match “{query}”.</p>}
+    <div className="author-footer"><a href="#authors">Explore the complete author gallery <ArrowRight size={17}/></a></div>
+  </div></section>;
+}
 function Publishers() { const names=["PENGUIN","HarperCollins","SIMON & SCHUSTER","MACMILLAN","HACHETTE","BLOOMSBURY"]; return <section className="publisher-band" id="publishers"><div className="container"><p className="eyebrow">FEATURED PUBLISHERS</p><div className="publisher-loop">{[...names,...names].map((x,i)=><span key={`${x}-${i}`}>{x}<i>✦</i></span>)}</div></div></section>; }
 function Recent({onWish,onCart}:{onWish:()=>void;onCart:()=>void}) { return <section className="section"><div className="container"><SectionHeading eyebrow="JUST IN" title="Recently Published" copy="Fresh stories, new voices and the latest releases." action="View New Releases"/><div className="book-grid">{books.slice(0,8).map((b,i)=><BookCard key={i} book={b} compact onWish={onWish} onCart={onCart}/>)}</div></div></section>; }
 const categories = ["Novels","Poetry","Short Stories","Spirituality","Politics","Sports","Translation","E-Books","Text Books"];
