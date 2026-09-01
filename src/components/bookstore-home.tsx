@@ -66,11 +66,25 @@ function Hero() { return <section className="hero" id="top"><div className="hero
   <div className="hero-books" aria-label="Curated book selection"><img className="hero-cover hero-cover-a" src={ocean} alt="The Far Shore cover" width={768} height={1152}/><img className="hero-cover hero-cover-b" src={silence} alt="A Map of Silence cover" width={768} height={1152}/><img className="hero-cover hero-cover-main" src={midnight} alt="The Midnight Library cover" width={768} height={1152}/><img className="hero-cover hero-cover-c" src={garden} alt="The Garden at Night cover" width={768} height={1152}/><div className="editors-pick"><span>EDITOR'S PICK</span><strong>The Midnight Library</strong><p>Matt Haig</p><div>★★★★★</div></div></div></div><div className="scroll-cue">SCROLL TO DISCOVER <span/></div></section>; }
 
 const authors = [
-  { name: "Haruki Murakami", genre: "Fiction · Magical Realism", works: "18 Works", image: author1 },
-  { name: "Anika Rao", genre: "Poetry · Essays", works: "7 Works", image: author2 },
-  { name: "Elias Brooks", genre: "Culture · Current Affairs", works: "11 Works", image: author3 },
+  { name: "Haruki Murakami", genre: "Fiction · Magical Realism", works: "18 Works", image: author1, note: "Dreamlike stories where memory, solitude and everyday life quietly overlap." },
+  { name: "Anika Rao", genre: "Poetry · Essays", works: "7 Works", image: author2, note: "Lyrical meditations on belonging, language and the landscapes we carry." },
+  { name: "Elias Brooks", genre: "Culture · Current Affairs", works: "11 Works", image: author3, note: "Incisive writing on culture, civic life and the ideas shaping our moment." },
 ];
-function Authors() { return <section className="section author-section" id="authors"><div className="container"><SectionHeading eyebrow="VOICES TO KNOW" title="Authors shaping today's stories" action="Meet all authors"/><div className="author-grid">{authors.map((a,i)=><article className={`author-card author-${i+1}`} key={a.name}><div className="portrait"><img src={a.image} alt={`Portrait of ${a.name}`} width={1024} height={1280} loading="lazy"/></div><span>0{i+1}</span><h3>{a.name}</h3><p>{a.genre}<br/>{a.works}</p><a href="#books">Explore Author <ArrowUpRight size={16}/></a></article>)}</div></div></section>; }
+function Authors() {
+  const [query, setQuery] = useState("");
+  const visibleAuthors = authors.filter((author) => `${author.name} ${author.genre}`.toLowerCase().includes(query.toLowerCase()));
+
+  return <section className="section author-section" id="authors"><div className="container author-shell">
+    <header className="author-heading"><div><p className="eyebrow">VOICES TO KNOW</p><h2>Meet the minds<br/>behind the stories.</h2><p>Discover singular voices from our most celebrated collection of literature.</p></div><label className="author-search"><Search size={18}/><span className="sr-only">Search authors or genres</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search authors or genres…"/></label></header>
+    <div className="author-grid">{visibleAuthors.map((author, index) => <article className="author-card" key={author.name}>
+      <div className="portrait"><img src={author.image} alt={`Portrait of ${author.name}`} width={1024} height={1280} loading="lazy"/><span>0{index + 1}</span></div>
+      <h3>{author.name}</h3><p className="author-specialty">{author.genre} · {author.works}</p><p className="author-note">{author.note}</p>
+      <div className="author-actions"><a href="#books">Explore Author <ArrowUpRight size={15}/></a><a href="#books"><BookOpen size={15}/> View Books</a></div>
+    </article>)}</div>
+    {visibleAuthors.length === 0 && <p className="author-empty">No authors match “{query}”.</p>}
+    <div className="author-footer"><a href="#authors">Explore the complete author gallery <ArrowRight size={17}/></a></div>
+  </div></section>;
+}
 function Publishers() { const names=["PENGUIN","HarperCollins","SIMON & SCHUSTER","MACMILLAN","HACHETTE","BLOOMSBURY"]; return <section className="publisher-band" id="publishers"><div className="container"><p className="eyebrow">FEATURED PUBLISHERS</p><div className="publisher-loop">{[...names,...names].map((x,i)=><span key={`${x}-${i}`}>{x}<i>✦</i></span>)}</div></div></section>; }
 function Recent({onWish,onCart}:{onWish:()=>void;onCart:()=>void}) { return <section className="section"><div className="container"><SectionHeading eyebrow="JUST IN" title="Recently Published" copy="Fresh stories, new voices and the latest releases." action="View New Releases"/><div className="book-grid">{books.slice(0,8).map((b,i)=><BookCard key={i} book={b} compact onWish={onWish} onCart={onCart}/>)}</div></div></section>; }
 const categories = ["Novels","Poetry","Short Stories","Spirituality","Politics","Sports","Translation","E-Books","Text Books"];

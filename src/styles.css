@@ -5,8 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "DM Sans", sans-serif;
+  --font-sans: "Poppins", sans-serif;
   --font-display: "Instrument Serif", serif;
+  --font-handwriting: "Caveat", cursive;
+  --font-script: "Reenie Beanie", cursive;
   --color-background: var(--color-background);
   --color-foreground: var(--text-primary);
   --color-card: var(--surface-elevated);
@@ -29,25 +31,25 @@
 }
 
 :root {
-  --color-background: #090a0f;
-  --color-surface: #12141c;
-  --color-primary: #7c5cff;
-  --color-accent: #54e6d6;
+  --color-background: #fbf6ec;
+  --color-surface: #f7f1e3;
+  --color-primary: #102418;
+  --color-accent: #c45520;
 
-  --surface-elevated: color-mix(in oklab, var(--color-surface) 88%, white 12%);
-  --surface-hover: color-mix(in oklab, var(--color-surface) 80%, white 20%);
+  --surface-elevated: color-mix(in oklab, var(--color-surface) 88%, black 8%);
+  --surface-hover: color-mix(in oklab, var(--color-surface) 80%, black 15%);
   --surface-soft: color-mix(in oklab, var(--color-surface) 60%, var(--color-background));
   --surface-tint: color-mix(in oklab, var(--color-surface) 92%, var(--color-primary) 8%);
-  --text-primary: color-mix(in oklab, var(--color-background) 3%, white 97%);
-  --text-secondary: color-mix(in oklab, var(--color-background) 28%, white 72%);
-  --text-muted: color-mix(in oklab, var(--color-background) 52%, white 48%);
+  --text-primary: color-mix(in oklab, var(--color-background) 3%, black 97%);
+  --text-secondary: color-mix(in oklab, var(--color-background) 28%, black 72%);
+  --text-muted: color-mix(in oklab, var(--color-background) 52%, black 48%);
   --text-on-primary: color-mix(in oklab, var(--color-primary) 10%, white 90%);
-  --border-default: color-mix(in oklab, var(--color-background) 82%, white 18%);
+  --border-default: color-mix(in oklab, var(--color-background) 82%, black 18%);
   --border-hover: color-mix(in oklab, var(--color-primary) 45%, var(--border-default));
-  --primary-hover: color-mix(in oklab, var(--color-primary) 84%, white 16%);
+  --primary-hover: color-mix(in oklab, var(--color-primary) 84%, black 16%);
   --primary-soft: color-mix(in oklab, var(--color-primary) 16%, transparent);
   --primary-glow: color-mix(in oklab, var(--color-primary) 28%, transparent);
-  --accent-hover: color-mix(in oklab, var(--color-accent) 84%, white 16%);
+  --accent-hover: color-mix(in oklab, var(--color-accent) 84%, black 16%);
   --accent-soft: color-mix(in oklab, var(--color-accent) 13%, transparent);
   --overlay: color-mix(in oklab, var(--color-background) 72%, transparent);
   --gradient-primary: linear-gradient(135deg, var(--color-primary), color-mix(in oklab, var(--color-primary) 55%, var(--color-accent)));
@@ -62,7 +64,7 @@
 
 * { box-sizing: border-box; border-color: var(--border-default); }
 html { scroll-behavior: smooth; background: var(--color-background); }
-body { margin: 0; background: var(--color-background); color: var(--text-primary); font-family: "DM Sans", sans-serif; overflow-x: hidden; }
+body { margin: 0; background: var(--color-background); color: var(--text-primary); font-family: "Poppins", sans-serif; overflow-x: hidden; }
 button, input { font: inherit; }
 a { color: inherit; text-decoration: none; }
 button { color: inherit; }
@@ -153,16 +155,35 @@ main { min-height: 100vh; }
 .book-grid .compact .book-meta h3 { font-size: 19px; }
 
 .author-section { background: var(--surface-soft); }
-.author-grid { display: grid; grid-template-columns: 1.05fr .8fr 1.05fr; gap: 22px; align-items: end; }
-.author-card { position: relative; }
-.author-card .portrait { height: 500px; overflow: hidden; border-radius: var(--radius-sm); }
-.author-card.author-2 .portrait { height: 405px; }
-.author-card img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) contrast(1.04); transition: transform .7s, filter .5s; }
-.author-card:hover img { transform: scale(1.025); filter: saturate(.9); }
-.author-card > span { display: block; color: var(--color-accent); font-size: 10px; margin-top: 18px; }
-.author-card h3 { font: 400 32px/1 "Instrument Serif"; margin: 8px 0 10px; }
-.author-card p { color: var(--text-muted); font-size: 12px; line-height: 1.7; }
-.author-card a { display: inline-flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 12px; }
+.author-shell { padding-block: 8px; }
+.author-heading { display: flex; align-items: end; justify-content: space-between; gap: 50px; margin-bottom: 76px; }
+.author-heading h2 { margin: 0; font: 400 clamp(50px, 5.2vw, 76px)/.94 "Instrument Serif", serif; }
+.author-heading > div > p:last-child { max-width: 530px; margin: 20px 0 0; color: var(--text-secondary); line-height: 1.7; }
+.author-search { width: min(100%, 360px); min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 18px; border: 1px solid var(--border-default); border-radius: var(--radius-xl); background: var(--color-background); box-shadow: var(--shadow-soft); color: var(--text-muted); transition: border-color .25s, box-shadow .25s; }
+.author-search:focus-within { border-color: var(--color-accent); box-shadow: 0 0 0 4px var(--accent-soft); color: var(--color-accent); }
+.author-search input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--text-primary); font-size: 13px; }
+.author-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; }
+.author-card { min-width: 0; display: flex; flex-direction: column; align-items: center; padding: 38px 30px 28px; text-align: center; border: 1px solid var(--border-default); border-radius: var(--radius-lg); background: var(--color-surface); transition: transform .35s, border-color .35s, background .35s; }
+.author-card:hover { transform: translateY(-6px); border-color: var(--border-hover); background: var(--surface-tint); }
+.author-card .portrait { position: relative; width: 174px; height: 174px; margin-bottom: 28px; border-radius: 50%; }
+.author-card .portrait::before { content: ""; position: absolute; inset: -7px; border: 1px solid var(--border-default); border-radius: inherit; transition: border-color .35s, transform .35s; }
+.author-card:hover .portrait::before { border-color: var(--color-accent); transform: rotate(8deg); }
+.author-card img { width: 100%; height: 100%; object-fit: cover; object-position: center 24%; border-radius: 50%; filter: saturate(.65) sepia(.08); transition: transform .65s, filter .45s; }
+.author-card:hover img { transform: scale(1.035); filter: saturate(.9); }
+.author-card .portrait span { position: absolute; top: -3px; right: -6px; width: 42px; height: 42px; display: grid; place-items: center; border: 4px solid var(--color-surface); border-radius: 50%; background: var(--color-primary); color: var(--text-on-primary); font: italic 400 15px "Instrument Serif", serif; box-shadow: var(--shadow-soft); transition: transform .3s, border-color .3s; }
+.author-card:hover .portrait span { transform: scale(1.08); border-color: var(--surface-tint); }
+.author-card h3 { margin: 0 0 8px; font: 400 31px/1 "Instrument Serif", serif; transition: color .25s; }
+.author-card:hover h3 { color: var(--color-accent); }
+.author-card .author-specialty { min-height: 30px; margin: 0; color: var(--color-accent); font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .16em; }
+.author-card .author-note { max-width: 300px; min-height: 68px; margin: 14px 0 26px; color: var(--text-muted); font-size: 12px; line-height: 1.7; }
+.author-actions { width: 100%; padding-top: 18px; border-top: 1px solid var(--border-default); display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.author-actions a { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 600; transition: color .25s, gap .25s; }
+.author-actions a:last-child { color: var(--text-muted); font-weight: 500; }
+.author-actions a:hover { color: var(--color-accent); gap: 10px; }
+.author-empty { padding: 70px 0; text-align: center; color: var(--text-muted); }
+.author-footer { margin-top: 62px; padding-top: 30px; border-top: 1px solid var(--border-default); text-align: center; }
+.author-footer a { display: inline-flex; align-items: center; gap: 10px; color: var(--color-primary); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; transition: color .25s, gap .25s; }
+.author-footer a:hover { color: var(--color-accent); gap: 15px; }
 .publisher-band { padding: 60px 0; border-block: 1px solid var(--border-default); overflow: hidden; }
 .publisher-loop { display: flex; gap: 45px; width: max-content; animation: marquee 28s linear infinite; }
 .publisher-loop span { color: var(--text-secondary); font-family: "Instrument Serif"; font-size: 27px; display: flex; gap: 45px; align-items: center; }
@@ -257,14 +278,14 @@ footer { padding: 90px 0 28px; }
 @media (max-width: 1050px) {
   .nav-links { display: none; }.nav-inner { grid-template-columns: 1fr 1fr; }.nav-actions > .icon-btn:last-child { display: grid; }
   .hero { height: auto; min-height: 920px; padding: 130px 0 60px; }.hero-grid { grid-template-columns: 1fr 1fr; }.hero-books { height: 600px; }.hero-cover-main{left:20%;}.hero-cover-b{display:none}.hero-cover-c{right:-10%}
-  .book-grid { grid-template-columns: repeat(3,1fr); }.author-card .portrait{height:420px}.category-grid{grid-template-columns:repeat(3,1fr)}.category-1{grid-column:span 2}.poetry-grid{gap:50px}.topic-row{grid-template-columns:1fr}.translation-grid{grid-template-columns:1fr}.translation-grid article{grid-template-columns:120px 1fr}.translation-grid img{width:120px;height:180px}.ranking{grid-template-columns:1fr 1fr}.rank.top{grid-column:span 2;grid-row:auto}.footer-grid{grid-template-columns:2fr repeat(2,1fr);row-gap:50px}
+  .book-grid { grid-template-columns: repeat(3,1fr); }.author-heading{align-items:flex-start}.author-grid{grid-template-columns:repeat(2,1fr)}.category-grid{grid-template-columns:repeat(3,1fr)}.category-1{grid-column:span 2}.poetry-grid{gap:50px}.topic-row{grid-template-columns:1fr}.translation-grid{grid-template-columns:1fr}.translation-grid article{grid-template-columns:120px 1fr}.translation-grid img{width:120px;height:180px}.ranking{grid-template-columns:1fr 1fr}.rank.top{grid-column:span 2;grid-row:auto}.footer-grid{grid-template-columns:2fr repeat(2,1fr);row-gap:50px}
 }
 @media (max-width: 700px) {
   .container, .topic-row { width: min(100% - 36px, 1320px); }.section { padding: 76px 0; }.section-heading { margin-bottom: 36px; align-items:flex-start; }.section-heading h2 { font-size: 46px; }.section-heading .text-link { display:none }.eyebrow{margin-bottom:13px}
   .navbar{height:66px}.nav-inner{width:calc(100% - 24px)}.nav-actions > .icon-btn:nth-of-type(2),.nav-actions > .icon-btn:nth-of-type(3),.nav-actions > .icon-btn:nth-of-type(4){display:none}.searching .search-box{position:absolute;left:0;right:0;top:10px;width:100%;z-index:4}.brand-mark{width:32px;height:32px}
   .hero{min-height:850px;padding:110px 0 30px;align-items:flex-start}.hero-grid{grid-template-columns:1fr;gap:10px}.hero-copy h1{font-size:61px}.hero-copy > p:not(.eyebrow){font-size:14px}.hero-actions{margin-top:28px;gap:20px}.hero-note{display:none}.hero-books{height:380px;margin-top:12px}.hero-cover-main{width:170px;height:255px;left:29%;top:45px}.hero-cover-a{width:115px;height:173px;left:2%;top:100px}.hero-cover-c{width:115px;height:173px;right:1%;top:95px}.editors-pick{width:178px;right:3%;bottom:0;padding:12px}.scroll-cue{display:none}
   .carousel-head .section-heading{padding-right:0}.arrow-set{display:none}.book-rail{grid-auto-columns:minmax(155px,66vw);gap:18px;margin-right:-18px}.book-actions{opacity:1;transform:none}.book-actions .icon-btn{width:34px;height:34px}.book-meta h3{font-size:18px}
-  .book-grid{grid-template-columns:repeat(2,1fr);gap:38px 14px}.author-grid{grid-template-columns:1fr;gap:52px}.author-card .portrait,.author-card.author-2 .portrait{height:410px}.author-card h3{font-size:29px}
+  .book-grid{grid-template-columns:repeat(2,1fr);gap:38px 14px}.author-heading{display:block;margin-bottom:48px}.author-heading h2{font-size:50px}.author-heading > div > p:last-child{font-size:13px}.author-search{margin-top:28px}.author-grid{grid-template-columns:1fr;gap:18px}.author-card{padding:32px 24px 24px}.author-card .portrait{width:158px;height:158px}.author-card h3{font-size:29px}.author-footer{margin-top:44px}
   .publisher-band{padding:45px 0}.publisher-loop span{font-size:23px}.category-grid{grid-template-columns:1fr 1fr;grid-auto-rows:145px}.category-1{grid-column:span 2;grid-row:span 1}.category-1 h3{font-size:38px}.category-4,.category-7{grid-row:span 1}.category-6{grid-column:span 2}.category h3{font-size:24px}
   .poetry-grid{grid-template-columns:1fr}.poetry-quote blockquote{font-size:48px}.poetry-books{gap:14px}.poetry-books .book-card:first-child{transform:none}
   .topic-row{padding:70px 0;gap:35px}.topic-copy h2{font-size:43px}.topic-books{display:flex;overflow:auto;margin-right:-18px}.topic-books article{grid-template-columns:80px 120px;min-width:220px}.topic-books article>span{display:none}.topic-books img{width:80px;height:120px}.translation-grid article{padding:12px;gap:15px}.translation-grid h3{font-size:20px}
